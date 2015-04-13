@@ -1,0 +1,18 @@
+{
+    "name": "ry167/twig-gravatar",
+    "description": "",
+    "keywords": ["twig","gravatar"],
+    "homepage": "http://blog.ry167.com",
+    "type": "library",
+    "authors": [{
+            "name": "Ryan Halliday",
+            "email": "ry167@ry167.com"
+        }
+    ],
+    "require": {
+        "twig/twig": ">=1.12"
+    },
+    "autoload": {
+        "classmap":["TwigGravatar.php"]
+    }
+}
