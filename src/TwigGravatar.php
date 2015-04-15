@@ -4,14 +4,16 @@ class TwigGravatar extends \Twig_Extension{
 	public $baseUrl = "http://www.gravatar.com/";
 	public $httpsUrl = "https://secure.gravatar.com/";
 
+	public $filterPrefix = "gr";
+
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getFilters(){
 		return array(
-			'grAvatar' => new \Twig_Filter_Method($this,'avatar'),
-			'grHttps' => new \Twig_Filter_Method($this,'https'),
-			'grSize' => new \Twig_Filter_Method($this,'size'),
+			$filterPrefix.'Avatar' => new \Twig_Filter_Method($this,'avatar'),
+			$filterPrefix.'Https' => new \Twig_Filter_Method($this,'https'),
+			$filterPrefix.'Size' => new \Twig_Filter_Method($this,'size'),
 		);
 	}
 
