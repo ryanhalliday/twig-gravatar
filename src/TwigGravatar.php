@@ -6,14 +6,25 @@ class TwigGravatar extends \Twig_Extension{
 
 	public $filterPrefix = "gr";
 
+	private $filterOptions = array("is_safe" => array("html"));
+
+	private $defaults = array(
+		"404", "mm", "identicon", "monsterid", "wavatar", "retro", "blank"
+	);
+	private $ratings = array(
+		"g", "pg", "r", "x"
+	);
+
 	/**
 	 * {@inheritdoc}
 	 */
 	public function getFilters(){
 		return array(
-			$filterPrefix.'Avatar' => new \Twig_Filter_Method($this,'avatar'),
-			$filterPrefix.'Https' => new \Twig_Filter_Method($this,'https'),
-			$filterPrefix.'Size' => new \Twig_Filter_Method($this,'size'),
+			$this->filterPrefix.'Avatar'  => new \Twig_Filter_Method($this,'avatar', $this->filterOptions),
+			$this->filterPrefix.'Https'   => new \Twig_Filter_Method($this,'https', $this->filterOptions),
+			$this->filterPrefix.'Size'    => new \Twig_Filter_Method($this,'size', $this->filterOptions),
+			$this->filterPrefix.'Default' => new \Twig_Filter_Method($this, 'def', $this->filterOptions),
+			$this->filterPrefix.'Rating'  => new \Twig_Filter_Method($this, 'rating', $this->filterOptions),
 		);
 	}
 
@@ -61,9 +72,49 @@ class TwigGravatar extends \Twig_Extension{
 			throw new InvalidArgumentException("You must pass the size filter an existing Gravatar URL");
 		}
 		else{
-			return $value . "?size=" . $px;
+			return $this->query($value, array("size" => $px));
 		}
 	}
+
+	/**
+	 * Specify a default Image for when there is no matching Gravatar image.
+	 * @param string  $value
+	 * @param string  $default Defaults to Mystery Man
+	 * @param boolean $force   Always load the default image
+	 * @return string          Gravatar URL with a default image.
+	 */
+	public function def($value, $default = "mm", $force = false){
+		if (filter_var($default, FILTER_VALIDATE_URL)){
+			$default = urlencode($default);
+		}
+		else if (!in_array($default, $this->defaults)){
+			throw new InvalidArgumentException("Default must be a URL or valid default");
+		}
+		
+		if (!is_bool($force)){
+			throw new InvalidArgumentException("The force option for a default must be boolean");
+		}
+		else{
+			$force = ($force ? "y" : "n");
+			return $this->query($value, array("default" => $default, "forcedefault" => $force));
+		}
+	}
+
+	/**
+	 * Specify the maximum rating for an avatar
+	 * @param  string $value
+	 * @param  string $rating Expects g,pg,r or x
+	 * @return string Gravatar URL with a rating specified
+	 */
+	public function rating($value, $rating){
+		if (!in_array(strtolower($rating), $this->ratings)){
+			throw new InvalidArgumentException("Rating must be g,pg,r or x");
+		}
+		else{
+			return $this->query($value, array("rating" => $rating));
+		}
+	}
+
 
 	/**
 	 * Generate the Hashed email address
@@ -72,6 +123,19 @@ class TwigGravatar extends \Twig_Extension{
 	 */
 	public function generateHash($email){
 		return md5(strtolower(trim($email)));
+	}
+
+	/**
+	 * Generate the query string
+	 * @param  string $string
+	 * @param  array  $addition Array of what parameters to add
+	 * @return string
+	 */
+	private function query($string, array $addition){
+		foreach ($addition as $name => $value){
+			$string .= (strpos($string,"?") === FALSE ? "?" : "&") . $name . "=" . $value;
+		}
+		return $string;
 	}
 
 	/**
