@@ -9,9 +9,9 @@ class TwigGravatar extends \Twig_Extension{
 	 */
 	public function getFilters(){
 		return array(
-			'avatar' => new \Twig_Filter_Method($this,'avatar'),
-			'https' => new \Twig_Filter_Method($this,'https'),
-			'size' => new \Twig_Filter_Method($this,'size'),
+			'grAvatar' => new \Twig_Filter_Method($this,'avatar'),
+			'grHttps' => new \Twig_Filter_Method($this,'https'),
+			'grSize' => new \Twig_Filter_Method($this,'size'),
 		);
 	}
 
@@ -68,7 +68,7 @@ class TwigGravatar extends \Twig_Extension{
 	 * @param  string $email
 	 * @return string        Hashed email address
 	 */
-	private function generateHash($email){
+	public function generateHash($email){
 		return md5(strtolower(trim($email)));
 	}
 
