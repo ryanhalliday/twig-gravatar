@@ -61,10 +61,9 @@ class TwigGravatar extends \Twig_Extension{
 	 * @param  string  $value
 	 * @param  integer $px
 	 * @return string Sized Gravatar URL
-	 * @todo  Check if the ? is still needed
 	 */
-	public function size($value, $px){
-		if (!is_numeric($px) && $px < 0 && $px > 2048){
+	public function size($value, $px = 100){
+		if (!is_numeric($px) || $px < 0 || $px > 2048){
 			throw new InvalidArgumentException("You must pass the size filter a valid number between 0 and 2048");
 		}
 		else if (strpos($value,$this->baseUrl) === false
@@ -84,17 +83,17 @@ class TwigGravatar extends \Twig_Extension{
 	 * @return string          Gravatar URL with a default image.
 	 */
 	public function def($value, $default = "mm", $force = false){
-		if (filter_var($default, FILTER_VALIDATE_URL)){
-			$default = urlencode($default);
+		if (strpos($value, $this->baseUrl) === false && strpos($value, $this->httpsUrl) === false){
+			throw new InvalidArgumentException("You can only a default to existing Gravatar URLs");
 		}
-		else if (!in_array($default, $this->defaults)){
+		else if (!filter_var($default, FILTER_VALIDATE_URL) && !in_array($default, $this->defaults)){
 			throw new InvalidArgumentException("Default must be a URL or valid default");
 		}
-		
-		if (!is_bool($force)){
+		else if (!is_bool($force)){
 			throw new InvalidArgumentException("The force option for a default must be boolean");
 		}
-		else{
+		else {
+			if (filter_var($default, FILTER_VALIDATE_URL)) $default = urlencode($default);
 			$force = ($force ? "y" : "n");
 			return $this->query($value, array("default" => $default, "forcedefault" => $force));
 		}
@@ -106,8 +105,11 @@ class TwigGravatar extends \Twig_Extension{
 	 * @param  string $rating Expects g,pg,r or x
 	 * @return string Gravatar URL with a rating specified
 	 */
-	public function rating($value, $rating){
-		if (!in_array(strtolower($rating), $this->ratings)){
+	public function rating($value, $rating = "g"){
+		if (strpos($value, $this->baseUrl) === false && strpos($value, $this->httpsUrl) === false){
+			throw new InvalidArgumentException("You can only add a rating to an existing Gravatar URL");
+		}
+		else if (!in_array(strtolower($rating), $this->ratings)){
 			throw new InvalidArgumentException("Rating must be g,pg,r or x");
 		}
 		else{

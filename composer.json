@@ -12,7 +12,13 @@
     "require": {
         "twig/twig": ">=1.12"
     },
+    "require-dev":{
+        "phpunit/phpunit": "4.6.*"
+    },
     "autoload": {
         "classmap":["src/TwigGravatar.php"]
+    },
+    "autoload-dev":{
+        "classmap":["tests/"]
     }
 }
