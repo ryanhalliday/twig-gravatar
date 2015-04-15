@@ -1,14 +1,20 @@
 {
     "name": "ry167/twig-gravatar",
-    "description": "",
+    "description": "Gravatar filters for Twig templates",
     "keywords": ["twig","gravatar"],
-    "homepage": "http://blog.ry167.com",
+    "homepage": "https://github.com/ry167/twig-gravatar",
+    "license": "MIT",
     "type": "library",
     "authors": [{
             "name": "Ryan Halliday",
-            "email": "ry167@ry167.com"
+            "email": "ry167@ry167.com",
+            "homepage": "http://blog.ry167.com"
         }
     ],
+    "support":{
+        "source":"https://github.com/ry167/twig-gravatar",
+        "issues":"https://github.com/ry167/twig-gravatar/issues"
+    },
     "require": {
         "twig/twig": ">=1.12"
     },
