@@ -20,11 +20,11 @@ class TwigGravatar extends \Twig_Extension{
 	 */
 	public function getFilters(){
 		return array(
-			$this->filterPrefix.'Avatar'  => new \Twig_Filter_Method($this,'avatar', $this->filterOptions),
-			$this->filterPrefix.'Https'   => new \Twig_Filter_Method($this,'https', $this->filterOptions),
-			$this->filterPrefix.'Size'    => new \Twig_Filter_Method($this,'size', $this->filterOptions),
-			$this->filterPrefix.'Default' => new \Twig_Filter_Method($this, 'def', $this->filterOptions),
-			$this->filterPrefix.'Rating'  => new \Twig_Filter_Method($this, 'rating', $this->filterOptions),
+			$this->filterPrefix.'Avatar'  => new \Twig_SimpleFilter($this,'avatar', $this->filterOptions),
+			$this->filterPrefix.'Https'   => new \Twig_SimpleFilter($this,'https', $this->filterOptions),
+			$this->filterPrefix.'Size'    => new \Twig_SimpleFilter($this,'size', $this->filterOptions),
+			$this->filterPrefix.'Default' => new \Twig_SimpleFilter($this, 'def', $this->filterOptions),
+			$this->filterPrefix.'Rating'  => new \Twig_SimpleFilter($this, 'rating', $this->filterOptions),
 		);
 	}
 
