@@ -2,7 +2,10 @@
 An extension for Twig that provides simple filters for Gravatar.
 
 ##Installation
-`composer require ry167/twig-gravatar`
+Use `composer` to install this extension:
+```
+composer require ry167/twig-gravatar 1.0.0
+```
 
 ##Usage
 ```
