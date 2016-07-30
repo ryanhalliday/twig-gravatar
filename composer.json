@@ -1,30 +1,38 @@
 {
-    "name": "ry167/twig-gravatar",
-    "description": "Gravatar filters for Twig templates",
-    "keywords": ["twig","gravatar"],
-    "homepage": "https://github.com/ry167/twig-gravatar",
-    "license": "MIT",
-    "type": "library",
-    "authors": [{
-            "name": "Ryan Halliday",
-            "email": "ry167@ry167.com",
-            "homepage": "http://blog.ry167.com"
-        }
-    ],
-    "support":{
-        "source":"https://github.com/ry167/twig-gravatar",
-        "issues":"https://github.com/ry167/twig-gravatar/issues"
-    },
-    "require": {
-        "twig/twig": ">=1.12"
-    },
-    "require-dev":{
-        "phpunit/phpunit": "4.6.*"
-    },
-    "autoload": {
-        "classmap":["src/TwigGravatar.php"]
-    },
-    "autoload-dev":{
-        "classmap":["tests/"]
+  "name": "ry167/twig-gravatar",
+  "description": "Gravatar filters for Twig templates",
+  "keywords": [
+    "twig",
+    "gravatar"
+  ],
+  "homepage": "https://github.com/ry167/twig-gravatar",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Ryan Halliday",
+      "email": "ry167@ry167.com",
+      "homepage": "http://blog.ry167.com"
     }
+  ],
+  "support": {
+    "source": "https://github.com/ry167/twig-gravatar",
+    "issues": "https://github.com/ry167/twig-gravatar/issues"
+  },
+  "require": {
+    "twig/twig": ">=1.12"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.6.*"
+  },
+  "autoload": {
+    "classmap": [
+      "src/TwigGravatar.php"
+    ]
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/"
+    ]
+  }
 }
