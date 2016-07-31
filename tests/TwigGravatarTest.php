@@ -19,12 +19,19 @@ class TwigGravatarTest extends \PHPUnit_Framework_TestCase{
 	public function tearDown(){}
 
 	public function testGetFilters(){
+		$filterNames = array();
 		$filters = $this->TwigGravatar->getFilters();
-		$this->assertArrayHasKey('grAvatar',$filters);
-		$this->assertArrayHasKey('grHttps',$filters);
-		$this->assertArrayHasKey('grSize',$filters);
-		$this->assertArrayHasKey('grDefault',$filters);
-		$this->assertArrayHasKey('grRating',$filters);
+		
+		foreach ($filters as $twigSimpleFilter) {
+			$filterNames[] = $twigSimpleFilter->getName();
+		}
+
+ 
+		$this->assertContains('grAvatar',$filterNames);
+		$this->assertContains('grHttps',$filterNames);
+		$this->assertContains('grSize',$filterNames);
+		$this->assertContains('grDefault',$filterNames);
+		$this->assertContains('grRating',$filterNames);
 	}
 
 	public function testAvatar(){
