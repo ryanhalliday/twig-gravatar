@@ -19,14 +19,14 @@ class TwigGravatar extends \Twig_Extension {
 	 * {@inheritdoc}
 	 */
 	public function getFilters(){
-        return array(
-            new \Twig_SimpleFilter($this->filterPrefix . 'Avatar', array($this, 'avatar'), $this->filterOptions),
-            new \Twig_SimpleFilter($this->filterPrefix . 'Https', array($this, 'https'), $this->filterOptions),
-            new \Twig_SimpleFilter($this->filterPrefix . 'Size', array($this, 'size'), $this->filterOptions),
-            new \Twig_SimpleFilter($this->filterPrefix . 'Default', array($this, 'def'), $this->filterOptions),
-            new \Twig_SimpleFilter($this->filterPrefix . 'Rating', array($this, 'rating'), $this->filterOptions)
-        );
-    }
+		return array(
+			$this->filterPrefix.'Avatar'  => new \Twig_SimpleFilter('grAvatar', array($this,'avatar'), $this->filterOptions),
+			$this->filterPrefix.'Https'   => new \Twig_SimpleFilter('grHttps', array($this,'https'), $this->filterOptions),
+			$this->filterPrefix.'Size'    => new \Twig_SimpleFilter('grSize', array($this,'size'), $this->filterOptions),
+			$this->filterPrefix.'Default' => new \Twig_SimpleFilter('grDefault', array($this,'def'), $this->filterOptions),
+			$this->filterPrefix.'Rating'  => new \Twig_SimpleFilter('grRating', array($this,'rating'), $this->filterOptions),
+		);
+	}
 
 	/**
 	 * Get a Gravatar Avatar URL
