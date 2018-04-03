@@ -95,8 +95,11 @@ class TwigGravatar extends \Twig_Extension {
 		}
 		else {
 			if (filter_var($default, FILTER_VALIDATE_URL)) $default = urlencode($default);
-			$force = ($force ? "y" : "n");
-			return $this->query($value, array("default" => $default, "forcedefault" => $force));
+                        $addition = array("default" => $default);
+                        if ($force) {
+                            $addition["forcedefault"] = 'y';
+                        }
+			return $this->query($value, $addition);
 		}
 	}
 
