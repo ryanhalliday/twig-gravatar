@@ -85,9 +85,19 @@ class TwigGravatarTest extends \PHPUnit_Framework_TestCase{
 		$this->assertEquals(sizeof($Sizes), $ExceptionCount);
 	}
 
-	public function testDef(){
+	public function testDefWithForcedValueTrue(){
+		$Defaulted = $this->TwigGravatar->def($this->Url, "blank", true);
+		$this->assertEquals($this->Url."?default=blank&forcedefault=y", $Defaulted);
+	}
+
+	public function testDefWithForcedValueFalse(){
+		$Defaulted = $this->TwigGravatar->def($this->Url, "blank", false);
+		$this->assertEquals($this->Url."?default=blank", $Defaulted);
+	}
+
+	public function testDefWithoutForcedValue(){
 		$Defaulted = $this->TwigGravatar->def($this->Url, "blank");
-		$this->assertEquals($this->Url."?default=blank&forcedefault=n", $Defaulted);
+		$this->assertEquals($this->Url."?default=blank", $Defaulted);
 	}
 
 	public function testInvalidDef(){
