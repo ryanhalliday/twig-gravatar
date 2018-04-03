@@ -1,4 +1,4 @@
-#Twig Gravatar
+# Twig Gravatar
 [![Latest Version](https://img.shields.io/github/release/ry167/twig-gravatar.svg?style=flat-square)](https://github.com/ry167/twig-gravatar/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/ry167/twig-gravatar/master.svg?style=flat-square)](https://travis-ci.org/ry167/twig-gravatar)
@@ -7,13 +7,13 @@
 
 An extension for Twig that provides simple filters for Gravatar.
 
-##Installation
+## Installation
 Use `composer` to install this extension:
 ```
 composer require ry167/twig-gravatar 2.0.0
 ```
 
-##Usage
+## Usage
 ```
 require("vendor/autoload.php");
 
@@ -21,22 +21,22 @@ require("vendor/autoload.php");
 $twig->addExtension(new \TwigGravatar());
 ```
 
-##Filters
+## Filters
 This is Extension is designed so that you chain together the filters that you need on top of each other. You must however always start with the grAvatar filter.
 
-###grAvatar
+### grAvatar
 Create a Gravatar URL, This returns just the URL for the persons avatar image without the `<img>` tag
 ```
 {{example@example.com|grAvatar}}
 ```
 
-###grHttps
+### grHttps
 Change a Gravatar URL to its secure counterpart.
 ```
 {example@example.com|grAvatar|grHttps}
 ```
 
-###grSize
+### grSize
 Change the Size of the Gravatar Image to the specified size in pixels.
 ```
 {{example@example.com|grAvatar|grSize(1024)}}
@@ -44,22 +44,22 @@ Change the Size of the Gravatar Image to the specified size in pixels.
 
 Gravatar does not serve images greater than `2048px`, and they are all squares.
 
-###grDefault
+### grDefault
 Specify a default image for if the User does not have one defined
 ```
 {{example@example.com|grAvatar|grDefault('http://example.com/default.png')}}
 ```
 
-You can also use any of Gravatar's built in default images, [you can see them here](http://en.gravatar.com/site/implement/images/#default-image). Just use the code assigned to them such as `mm` instead of your Image URL.
+You can also use any of Gravatar's built in default images, [you can see them here](http://en.gravatar.com/site/implement/images/# default-image). Just use the code assigned to them such as `mm` instead of your Image URL.
 
-###grRating
+### grRating
 Specify a maximum rating that the image can be.
 Valid values are `g,pg,r` and `x`.
 ```
 {{example@example.com|grAvatar|grRating('pg')}}
 ```
 
-##Prefix
+## Prefix
 You can change the filter prefix from `gr` to something else by editing its public variable.
 ```
 //Define your Twig Environment and Twig Loader
