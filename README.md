@@ -10,7 +10,7 @@ An extension for Twig that provides simple filters for Gravatar.
 ## Installation
 Use `composer` to install this extension:
 ```
-composer require ry167/twig-gravatar 2.0.0
+composer require ry167/twig-gravatar 2.0.1
 ```
 
 ## Usage
