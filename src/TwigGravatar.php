@@ -4,7 +4,11 @@ class TwigGravatar extends \Twig_Extension {
 	public $baseUrl = "http://www.gravatar.com/";
 	public $httpsUrl = "https://secure.gravatar.com/";
 
-	public $filterPrefix = "gr";
+	private $default;
+	private $size;
+	private $filterPrefix;
+	private $rating;
+	private $useHttps;
 
 	private $filterOptions = array("is_safe" => array("html"));
 
@@ -14,6 +18,15 @@ class TwigGravatar extends \Twig_Extension {
 	private $ratings = array(
 		"g", "pg", "r", "x"
 	);
+
+	public function __construct($default = null, $size = null, $filterPrefix = 'gr', $rating = null, $useHttps = true)
+	{
+		$this->default = $default;
+		$this->size = $size;
+		$this->filterPrefix = $filterPrefix;
+		$this->rating = $rating;
+		$this->useHttps = $useHttps;
+	}
 
 	/**
 	 * {@inheritdoc}
@@ -46,10 +59,25 @@ class TwigGravatar extends \Twig_Extension {
 	 */
 	public function avatar($email) {
 		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			return $this->baseUrl . "avatar/" . $this->generateHash($email);
+			$baseUrl = $this->useHttps ? $this->https($this->baseUrl) : $this->baseUrl;
+			$url = $baseUrl . "avatar/" . $this->generateHash($email);
 		} else {
 			throw new InvalidArgumentException("The avatar filter must be passed a valid Email address");
 		}
+
+		if ($this->rating) {
+			$url = $this->rating($url, $this->rating);
+		}
+
+		if ($this->size) {
+			$url = $this->size($url, $this->size);
+		}
+
+		if ($this->default) {
+			$url = $this->def($url, $this->default);
+		}
+
+		return $url;
 	}
 
 	/**
@@ -73,7 +101,7 @@ class TwigGravatar extends \Twig_Extension {
 	 * @param  integer $px
 	 * @return string Sized Gravatar URL
 	 */
-	public function size($value, $px = 100) {
+	public function size($value, $px) {
 		if (!is_numeric($px) || $px < 0 || $px > 2048) {
 			throw new InvalidArgumentException("You must pass the size filter a valid number between 0 and 2048");
 		}
@@ -89,11 +117,11 @@ class TwigGravatar extends \Twig_Extension {
 	/**
 	 * Specify a default Image for when there is no matching Gravatar image.
 	 * @param string  $value
-	 * @param string  $default Defaults to Mystery Man
+	 * @param string  $default
 	 * @param boolean $force   Always load the default image
 	 * @return string          Gravatar URL with a default image.
 	 */
-	public function def($value, $default = "mm", $force = false) {
+	public function def($value, $default, $force = false) {
 		if (strpos($value, $this->baseUrl) === false && strpos($value, $this->httpsUrl) === false) {
 			throw new InvalidArgumentException("You can only a default to existing Gravatar URLs");
 		}
@@ -119,7 +147,7 @@ class TwigGravatar extends \Twig_Extension {
 	 * @param  string $rating Expects g,pg,r or x
 	 * @return string Gravatar URL with a rating specified
 	 */
-	public function rating($value, $rating = "g") {
+	public function rating($value, $rating) {
 		if (strpos($value, $this->baseUrl) === false && strpos($value, $this->httpsUrl) === false) {
 			throw new InvalidArgumentException("You can only add a rating to an existing Gravatar URL");
 		}
@@ -148,10 +176,21 @@ class TwigGravatar extends \Twig_Extension {
 	 * @return string
 	 */
 	private function query($string, array $addition) {
-		foreach ($addition as $name => $value) {
-			$string .= (strpos($string, "?") === FALSE ? "?" : "&") . $name . "=" . $value;
+		parse_str(parse_url( $string, PHP_URL_QUERY), $queryList);
+
+		foreach ($addition as $key => $value) {
+			$queryList[$key] = $value;
 		}
-		return $string;
+
+		$url = sprintf(
+			'%s://%s%s%s',
+			parse_url($string, PHP_URL_SCHEME),
+			parse_url($string, PHP_URL_HOST),
+			parse_url($string, PHP_URL_PATH),
+			!empty($queryList) ? '?'.http_build_query($queryList) : ''
+		);
+
+		return $url;
 	}
 
 	/**
