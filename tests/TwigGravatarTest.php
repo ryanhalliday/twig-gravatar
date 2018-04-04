@@ -1,150 +1,156 @@
 <?php
 class TwigGravatarTest extends \PHPUnit_Framework_TestCase{
-	protected $TwigGravatar;
+	/** @var TwigGravatar */
+	protected $twigGravatar;
 
-	protected $Email;
-	protected $Hash;
-	protected $Url;
-	protected $SecureUrl;
+	protected $email;
+	protected $hash;
+	protected $url;
+	protected $secureUrl;
 
 	public function setUp(){
-		$this->TwigGravatar = new \TwigGravatar();
+		$this->twigGravatar = new \TwigGravatar();
 
-		$this->Email = "example@example.com";
-		$this->Hash = "23463b99b62a72f26ed677cc556c44e8";
-		$this->Url = "http://www.gravatar.com/avatar/".$this->Hash;
-		$this->SecureUrl = "https://secure.gravatar.com/avatar/".$this->Hash;
+		$this->email = "example@example.com";
+		$this->hash = "23463b99b62a72f26ed677cc556c44e8";
+		$this->url = "http://www.gravatar.com/avatar/".$this->hash;
+		$this->secureUrl = "https://secure.gravatar.com/avatar/".$this->hash;
 	}
 
 	public function tearDown(){}
 
 	public function testGetFilters(){
 		$filterNames = array();
-		$filters = $this->TwigGravatar->getFilters();
-		
+		$filters = $this->twigGravatar->getFilters();
+
+		/** @var Twig_SimpleFilter $twigSimpleFilter */
 		foreach ($filters as $twigSimpleFilter) {
 			$filterNames[] = $twigSimpleFilter->getName();
 		}
 
- 
-		$this->assertContains('grAvatar',$filterNames);
-		$this->assertContains('grHttps',$filterNames);
-		$this->assertContains('grSize',$filterNames);
-		$this->assertContains('grDefault',$filterNames);
-		$this->assertContains('grRating',$filterNames);
+		$this->assertContains('grAvatar', $filterNames);
+		$this->assertContains('grHttps', $filterNames);
+		$this->assertContains('grSize', $filterNames);
+		$this->assertContains('grDefault', $filterNames);
+		$this->assertContains('grRating', $filterNames);
 	}
 
 	public function testAvatar(){
-		$Avatar = $this->TwigGravatar->avatar($this->Email);
-		$this->assertEquals($this->Url, $Avatar);
+		$avatar = $this->twigGravatar->avatar($this->email);
+		$this->assertEquals($this->secureUrl, $avatar);
 	}
 
 	public function testInvalidAvatar(){
 		$this->setExpectedException("InvalidArgumentException");
-		$Avatar = $this->TwigGravatar->avatar("invalid@@email..com");
+		$avatar = $this->twigGravatar->avatar("invalid@@email..com");
 	}
 
 	public function testHttps(){
-		$SecureUrl = $this->TwigGravatar->https($this->Url);
-		$this->assertEquals($this->SecureUrl, $SecureUrl);
+		$secureUrl = $this->twigGravatar->https($this->url);
+		$this->assertEquals($this->secureUrl, $secureUrl);
 	}
 
 	public function testInvalidUrl(){
-		$InvalidUrl = "http://not.gravatar.at.all";
-		$Functions = array('https','size','def','rating');
-		$ExceptionCount = 0;
+		$invalidUrl = "http://not.gravatar.at.all";
+		$functions = array(
+			'https' => null,
+			'size' => 20,
+			'def' => null,
+			'rating' => 'r'
+		);
+		$exceptionCount = 0;
 
-		foreach ($Functions as $function){
+		foreach ($functions as $function => $argument){
 			try{
-				$this->TwigGravatar->$function($InvalidUrl);
+				$this->twigGravatar->$function($invalidUrl, $argument);
 			} catch (Exception $e){
-				$ExceptionCount++;
+				$exceptionCount++;
 				$this->assertContains("existing Gravatar URL", $e->getMessage());
 			}
 		}
-		$this->assertEquals(sizeof($Functions), $ExceptionCount);
+		$this->assertEquals(sizeof($functions), $exceptionCount);
 	}
 
 	public function testSize(){
-		$Sized = $this->TwigGravatar->size($this->Url, 100);
-		$this->assertEquals($this->Url."?size=100", $Sized);
+		$sized = $this->twigGravatar->size($this->url, 100);
+		$this->assertEquals($this->url."?size=100", $sized);
 	}
 
 	public function testInvalidSize(){
-		$Sizes = array("abc", -1, 3000);
-		$ExceptionCount = 0;
+		$sizes = array("abc", -1, 3000);
+		$exceptionCount = 0;
 
-		foreach ($Sizes as $size){
+		foreach ($sizes as $size){
 			try{
-				echo $this->TwigGravatar->size($this->Url, $size);
+				echo $this->twigGravatar->size($this->url, $size);
 			} catch (InvalidArgumentException $e){
-				$ExceptionCount++;
+				$exceptionCount++;
 				$this->assertEquals("You must pass the size filter a valid number between 0 and 2048", $e->getMessage());
 			}
 		}
-		$this->assertEquals(sizeof($Sizes), $ExceptionCount);
+		$this->assertEquals(sizeof($sizes), $exceptionCount);
 	}
 
 	public function testDefWithForcedValueTrue(){
-		$Defaulted = $this->TwigGravatar->def($this->Url, "blank", true);
-		$this->assertEquals($this->Url."?default=blank&forcedefault=y", $Defaulted);
+		$defaulted = $this->twigGravatar->def($this->url, "blank", true);
+		$this->assertEquals($this->url."?default=blank&forcedefault=y", $defaulted);
 	}
 
 	public function testDefWithForcedValueFalse(){
-		$Defaulted = $this->TwigGravatar->def($this->Url, "blank", false);
-		$this->assertEquals($this->Url."?default=blank", $Defaulted);
+		$defaulted = $this->twigGravatar->def($this->url, "blank", false);
+		$this->assertEquals($this->url."?default=blank", $defaulted);
 	}
 
 	public function testDefWithoutForcedValue(){
-		$Defaulted = $this->TwigGravatar->def($this->Url, "blank");
-		$this->assertEquals($this->Url."?default=blank", $Defaulted);
+		$defaulted = $this->twigGravatar->def($this->url, "blank");
+		$this->assertEquals($this->url."?default=blank", $defaulted);
 	}
 
 	public function testInvalidDef(){
-		$ExceptionCount = 0;
+		$exceptionCount = 0;
 
 		try{
-			$this->TwigGravatar->def($this->Url, "thisisnotanavatarorurl");
+			$this->twigGravatar->def($this->url, "thisisnotanavatarorurl");
 		} catch (InvalidArgumentException $e){
-			$ExceptionCount++;
+			$exceptionCount++;
 			$this->assertEquals('Default must be a URL or valid default', $e->getMessage());
 		}
 
 		try{
-			$this->TwigGravatar->def($this->Url, "blank", "probably");
+			$this->twigGravatar->def($this->url, "blank", "probably");
 		} catch (InvalidArgumentException $e){
-			$ExceptionCount++;
+			$exceptionCount++;
 			$this->assertEquals("The force option for a default must be boolean", $e->getMessage());
 		}
 
-		$this->assertEquals(2, $ExceptionCount);
+		$this->assertEquals(2, $exceptionCount);
 	}
 
 	public function testRating(){
-		$Rated = $this->TwigGravatar->rating($this->Url, "r");
-		$this->assertEquals($this->Url."?rating=r", $Rated);
+		$rated = $this->twigGravatar->rating($this->url, "r");
+		$this->assertEquals($this->url."?rating=r", $rated);
 	}
 
 	public function testInvalidRating(){
-		$ExceptionCount = 0;
+		$exceptionCount = 0;
 
 		try{
-			$this->TwigGravatar->rating($this->Url, "y");
+			$this->twigGravatar->rating($this->url, "y");
 		} catch (InvalidArgumentException $e){
-			$ExceptionCount++;
+			$exceptionCount++;
 			$this->assertEquals("Rating must be g,pg,r or x", $e->getMessage());
 		}
 
-		$this->assertEquals(1, $ExceptionCount);
+		$this->assertEquals(1, $exceptionCount);
 	}
 
 	public function testGenerateHash(){
-		$Hash = $this->TwigGravatar->generateHash($this->Email);
-		$this->assertEquals($this->Hash, $Hash);
+		$hash = $this->twigGravatar->generateHash($this->email);
+		$this->assertEquals($this->hash, $hash);
 	}
 
 	public function testGetName(){
-		$Name = $this->TwigGravatar->getName();
-		$this->assertEquals("TwigGravatar", $Name);
+		$name = $this->twigGravatar->getName();
+		$this->assertEquals("TwigGravatar", $name);
 	}
 }
