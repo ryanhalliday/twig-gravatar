@@ -21,6 +21,14 @@ require("vendor/autoload.php");
 $twig->addExtension(new \TwigGravatar());
 ```
 
+## Usage in Symfony
+```
+    twig.extension.gravatar:
+        class: \TwigGravatar
+        tags:
+            - { name: twig.extension }
+```
+
 ## Filters
 This is Extension is designed so that you chain together the filters that you need on top of each other. You must however always start with the grAvatar filter.
 
