@@ -64,7 +64,7 @@ Gravatar does not serve images greater than `2048px`, and they are all squares.
 
 ### grDefault
 Specify a default image for if the User does not have one defined
-```
+```Twig
 {{ 'example@example.com'|grAvatar|grDefault('http://example.com/default.png') }}
 ```
 
@@ -73,7 +73,7 @@ You can also use any of Gravatar's built in default images, [you can see them he
 ### grRating
 Specify a maximum rating that the image can be.
 Valid values are `g`, `pg`, `r` and `x`.
-```
+```Twig
 {{ 'example@example.com'|grAvatar|grRating('pg') }}
 ```
 
