@@ -10,7 +10,7 @@ An extension for Twig that provides simple filters for Gravatar.
 ## Installation
 Use `composer` to install this extension:
 ```Shell
-composer require ry167/twig-gravatar 2.0.2
+composer require ry167/twig-gravatar 3.0.0
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ require("vendor/autoload.php");
 //Define your Twig Environment and Twig Loader
 $twig->addExtension(new \TwigGravatar());
 
-//create customized Twig Gravatar
+//or create a customized Twig Gravatar instance
 new \TwigGravatar($default = null, $size = null, $filterPrefix = 'gr', $rating = null, $useHttps = true);
 ```
 
@@ -37,10 +37,10 @@ new \TwigGravatar($default = null, $size = null, $filterPrefix = 'gr', $rating =
         tags:
             - { name: twig.extension }
 ```
-You can also remove arguments section and the default values shown will be used.
+You can also remove the arguments section and the default values will be used.
 
 ## Filters
-This is Extension is designed so that you chain together the filters that you need on top of each other. You must however always start with the grAvatar filter.
+This Extension is designed so that you chain together the filters that you need on top of each other. You must however always start with the grAvatar filter.
 
 ### grAvatar
 Create a Gravatar URL, This returns just the URL for the persons avatar image without the `<img>` tag
