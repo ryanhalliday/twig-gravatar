@@ -1,6 +1,6 @@
 <?php
 
-class TwigGravatar extends \Twig_Extension {
+class TwigGravatar extends \Twig\Extension\AbstractExtension {
 	public $baseUrl = "http://www.gravatar.com/";
 	public $httpsUrl = "https://secure.gravatar.com/";
 
