@@ -32,22 +32,12 @@ class TwigGravatar extends \Twig\Extension\AbstractExtension {
 	 * {@inheritdoc}
 	 */
 	public function getFilters() {
-		if ($this->filterPrefix !== 'gr') {
-			return array(
-				new \Twig_SimpleFilter($this->filterPrefix . 'Avatar', array($this, 'avatar'), $this->filterOptions),
-				new \Twig_SimpleFilter($this->filterPrefix . 'Https', array($this, 'https'), $this->filterOptions),
-				new \Twig_SimpleFilter($this->filterPrefix . 'Size', array($this, 'size'), $this->filterOptions),
-				new \Twig_SimpleFilter($this->filterPrefix . 'Default', array($this, 'def'), $this->filterOptions),
-				new \Twig_SimpleFilter($this->filterPrefix . 'Rating', array($this, 'rating'), $this->filterOptions)
-			);
-		}
-
 		return array(
-			new \Twig_SimpleFilter('grAvatar', array($this, 'avatar'), $this->filterOptions),
-			new \Twig_SimpleFilter('grHttps', array($this, 'https'), $this->filterOptions),
-			new \Twig_SimpleFilter('grSize', array($this, 'size'), $this->filterOptions),
-			new \Twig_SimpleFilter('grDefault', array($this, 'def'), $this->filterOptions),
-			new \Twig_SimpleFilter('grRating', array($this, 'rating'), $this->filterOptions)
+			new \Twig\TwigFilter($this->filterPrefix . 'Avatar', array($this, 'avatar'), $this->filterOptions),
+			new \Twig\TwigFilter($this->filterPrefix . 'Https', array($this, 'https'), $this->filterOptions),
+			new \Twig\TwigFilter($this->filterPrefix . 'Size', array($this, 'size'), $this->filterOptions),
+			new \Twig\TwigFilter($this->filterPrefix . 'Default', array($this, 'def'), $this->filterOptions),
+			new \Twig\TwigFilter($this->filterPrefix . 'Rating', array($this, 'rating'), $this->filterOptions)
 		);
 	}
 
